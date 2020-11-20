@@ -123,7 +123,8 @@ jma_time = ''
 # last data put jam_*
 for i in range(24):
     temp_path = '/html/body/div[2]/div[2]/div[4]/div[1]/div[2]/table/tr[{}]/td[2]'.format(i+3)
-    humd_path = '/html/body/div[2]/div[2]/div[4]/div[1]/div[2]/table/tr[{}]/td[7]'.format(i+3)
+    #humd_path = '/html/body/div[2]/div[2]/div[4]/div[1]/div[2]/table/tr[{}]/td[7]'.format(i+3)
+    humd_path = '/html/body/div[2]/div[2]/div[4]/div[1]/div[2]/table/tr[{}]/td[8]'.format(i+3)
     temp = jma_html.xpath(temp_path)[0].text
     humd = jma_html.xpath(humd_path)[0].text
     # if data is None then break
