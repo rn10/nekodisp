@@ -100,12 +100,12 @@ url_jmatokyo = 'http://www.jma.go.jp/jp/amedas_h/today-44132.html'
 # Scraping forecast
 forecast_response = requests.get(url_forecast)
 forecast_html = lxml.html.fromstring(forecast_response.text)
-today_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[7]/table/tr/td[1]/div/p[2]")[0].text_content()
-today_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[7]/table/tr/td[1]/div/ul/li[1]/em")[0].text
-today_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[7]/table/tr/td[1]/div/ul/li[2]/em")[0].text
-tomorrow_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[7]/table/tr/td[2]/div/p[2]")[0].text_content()
-tomorrow_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[7]/table/tr/td[2]/div/ul/li[1]/em")[0].text
-tomorrow_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[7]/table/tr/td[2]/div/ul/li[2]/em")[0].text
+today_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/p[2]")[0].text_content()
+today_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/ul/li[1]/em")[0].text
+today_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/ul/li[2]/em")[0].text
+tomorrow_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/p[2]")[0].text_content()
+tomorrow_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/ul/li[1]/em")[0].text
+tomorrow_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/ul/li[2]/em")[0].text
 
 # Scraping AMeDAS data
 
