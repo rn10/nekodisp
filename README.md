@@ -1,6 +1,10 @@
 # nekodisp
 
-apt install python3-lxml python3-pil libopenjp2-7-dev python3-numpy python-numpy libtiff5 libatlas-base-dev fonts-mplus
+apt install python3-lxml python3-pil libopenjp2-7-dev python3-numpy python-numpy libtiff5 libatlas-base-dev fonts-mplus python3-pip git 
+git clone https://github.com/rn10/nekodisp
+
+lnetatmoのクレデンシャルを設定
+sudo raspi-configでspiを有効にする
 
 
 crontab -e
