@@ -84,9 +84,11 @@ sun = ephem.Sun()
 moon = ephem.Moon()
 next_rising = ephem.localtime(Tokyo.next_rising(sun))
 next_setting = ephem.localtime(Tokyo.next_setting(sun))
+next_moonrising = ephem.localtime(Tokyo.next_rising(moon))
 moon_age = Tokyo.date - ephem.previous_new_moon(Tokyo.date)
 sunrise = str(next_rising.strftime('%H:%M'))
 sunset = str(next_setting.strftime('%H:%M'))
+moonrise = str(next_moonrising.strftime('%H:%M'))
 
 # Get Weather forecast, AMeDAS data
 
@@ -100,12 +102,18 @@ url_jmatokyo = 'http://www.jma.go.jp/jp/amedas_h/today-44132.html'
 # Scraping forecast
 forecast_response = requests.get(url_forecast)
 forecast_html = lxml.html.fromstring(forecast_response.text)
-today_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/p[2]")[0].text_content()
-today_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/ul/li[1]/em")[0].text
-today_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/ul/li[2]/em")[0].text
-tomorrow_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/p[2]")[0].text_content()
-tomorrow_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/ul/li[1]/em")[0].text
-tomorrow_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/ul/li[2]/em")[0].text
+
+try:
+    today_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/p[2]")[0].text_content()
+except:
+    today_forecast = today_max = today_min = tomorrow_forecast = tomorrow_max = tomorrow_min = "--"
+else:
+    today_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/ul/li[1]/em")[0].text
+    today_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/ul/li[2]/em")[0].text
+    tomorrow_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/p[2]")[0].text_content()
+    tomorrow_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/ul/li[1]/em")[0].text
+    tomorrow_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/ul/li[2]/em")[0].text
+
 
 # Scraping AMeDAS data
 
@@ -171,7 +179,7 @@ tomorrow_text = "明日 "+tomorrow_forecast+" "+tomorrow_max+"℃ "+tomorrow_min
 draw.text((cal_x - 10, cal_y - (font_size +4 +2) ), date_text, font=font_cal, fill=inky_display.BLACK)
 draw.text((cal_x + 100, cal_y - (font_size +2)), "月齢 "+str('%4.1f'%moon_age), font=font, fill=inky_display.BLACK)
 
-draw.text((cal_x + 5, cal_y + 1), "日出 "+sunrise+" 日没 "+sunset, font=font, fill=inky_display.BLACK)
+draw.text((cal_x + 5 - 15, cal_y + 1), "出"+sunrise+" 没"+sunset+" 月出"+moonrise, font=font, fill=inky_display.BLACK)
 
 draw.text((cal_x + 5, cal_y + 1 + font_size + 1), Indoor_text, font=font, fill=inky_display.BLACK)
 draw.rectangle((cal_x, cal_y + 4 + font_size + 1 , cal_x + 4, cal_y + 28 - 1), fill=bg_color1)
