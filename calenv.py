@@ -9,6 +9,7 @@ import ephem
 import requests
 import lxml.html
 import re
+import json
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -97,7 +98,8 @@ url_forecast = 'https://weather.yahoo.co.jp/weather/jp/13/4410.html'
 
 # AMeDAS data site
 # url_tokyo = 'https://tenki.jp/live/3/16/'
-url_jmatokyo = 'http://www.jma.go.jp/jp/amedas_h/today-44132.html'
+#url_jmatokyo = 'https://www.jma.go.jp/bosai/amedas/#area_type=offices&area_code=130000&amdno=44132&format=table10min'
+url_amedastokyo = 'https://****//api?'
 
 # Scraping forecast
 forecast_response = requests.get(url_forecast)
@@ -117,29 +119,11 @@ else:
 
 # Scraping AMeDAS data
 
-# now_response = requests.get(url_tokyo)
-# now_html = lxml.html.fromstring(now_response.text)
-# now_temp = now_html.xpath("/html/body/div[2]/section/section[2]/table/tr[2]/td[4]/span")[0].text
-# now_humd = now_html.xpath("/html/body/div[2]/section/section[2]/table/tr[2]/td[6]/span")[0].text
-# now_time = now_html.xpath("/html/body/div[2]/section/section[2]/h3/time")[0].text
-
-jma_response = requests.get(url_jmatokyo)
-jma_html = lxml.html.fromstring(jma_response.text)
-jma_temp = ''
-jma_humd = ''
-jma_time = ''
-# last data put jam_*
-for i in range(24):
-    temp_path = '/html/body/div[2]/div[2]/div[4]/div[1]/div[2]/table/tr[{}]/td[2]'.format(i+3)
-    #humd_path = '/html/body/div[2]/div[2]/div[4]/div[1]/div[2]/table/tr[{}]/td[7]'.format(i+3)
-    humd_path = '/html/body/div[2]/div[2]/div[4]/div[1]/div[2]/table/tr[{}]/td[8]'.format(i+3)
-    temp = jma_html.xpath(temp_path)[0].text
-    humd = jma_html.xpath(humd_path)[0].text
-    # if data is None then break
-    if temp is '\xa0' and humd is '\xa0':
-        break
-    jma_time, jma_temp, jma_humd = i+1, temp, humd
-
+amedas_response = requests.get(url_amedastokyo)
+amedas_data = amedas_response.json()
+jma_time = amedas_data["time"]
+jma_temp = amedas_data["temp"]
+jma_humd = amedas_data["humd"] 
 
 # Load background image
 img = Image.open(os.path.join(PATH, "resources/nekomimi_bg.png")).resize(inky_display.resolution)
