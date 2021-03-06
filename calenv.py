@@ -106,16 +106,15 @@ forecast_response = requests.get(url_forecast)
 forecast_html = lxml.html.fromstring(forecast_response.text)
 
 try:
-    today_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/p[2]")[0].text_content()
+    today_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/p[2]")[0].text_content().strip()
 except:
     today_forecast = today_max = today_min = tomorrow_forecast = tomorrow_max = tomorrow_min = "--"
 else:
-    today_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/ul/li[1]/em")[0].text
-    today_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/ul/li[2]/em")[0].text
-    tomorrow_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/p[2]")[0].text_content()
-    tomorrow_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/ul/li[1]/em")[0].text
-    tomorrow_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/ul/li[2]/em")[0].text
-
+    today_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/ul/li[1]/em")[0].text.strip()
+    today_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[1]/div/ul/li[2]/em")[0].text.strip()
+    tomorrow_forecast = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/p[2]")[0].text_content().strip()
+    tomorrow_max = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/ul/li[1]/em")[0].text.strip()
+    tomorrow_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/ul/li[2]/em")[0].text.strip()
 
 # Scraping AMeDAS data
 
