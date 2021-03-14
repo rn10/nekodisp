@@ -8,11 +8,8 @@ import lnetatmo
 import ephem
 import requests
 import lxml.html
-import re
-import json
 
 from PIL import Image, ImageDraw, ImageFont
-
 from inky import InkyPHAT
 
 # Get the current path
@@ -97,9 +94,7 @@ moonrise = str(next_moonrising.strftime('%H:%M'))
 url_forecast = 'https://weather.yahoo.co.jp/weather/jp/13/4410.html'
 
 # AMeDAS data site
-# url_tokyo = 'https://tenki.jp/live/3/16/'
-#url_jmatokyo = 'https://www.jma.go.jp/bosai/amedas/#area_type=offices&area_code=130000&amdno=44132&format=table10min'
-url_amedastokyo = 'https://****//api?'
+url_jmanow = 'https://weather.yahoo.co.jp/weather/amedas/13/44132.html'
 
 # Scraping forecast
 forecast_response = requests.get(url_forecast)
@@ -117,12 +112,11 @@ else:
     tomorrow_min = forecast_html.xpath("/html/body/div[1]/div[2]/div[2]/div[1]/div[6]/table/tr/td[2]/div/ul/li[2]/em")[0].text.strip()
 
 # Scraping AMeDAS data
-
-amedas_response = requests.get(url_amedastokyo)
-amedas_data = amedas_response.json()
-jma_time = amedas_data["time"]
-jma_temp = amedas_data["temp"]
-jma_humd = amedas_data["humd"] 
+jmanow_response = requests.get(url_jmanow)
+jmanow_html = lxml.html.fromstring(jmanow_response.content)
+jma_time = jmanow_html.xpath('//*[@id="yjw_kakuchi"]/table/tr[2]/td[2]/small')[0].text.strip()
+jma_temp = jmanow_html.xpath('//*[@id="yjw_kakuchi"]/table/tr[2]/td[3]/small')[0].text.strip()
+jma_wind = jmanow_html.xpath('//*[@id="yjw_kakuchi"]/table/tr[2]/td[6]/small')[0].text.strip()
 
 # Load background image
 img = Image.open(os.path.join(PATH, "resources/nekomimi_bg.png")).resize(inky_display.resolution)
@@ -154,8 +148,7 @@ font_cal = ImageFont.truetype(font = '/usr/share/fonts/truetype/mplus/mplus-2c-b
 date_text = now.strftime('%b %d %H:%M')
 Indoor_text = "L "+str('%4.1f'%IndoorTemp if IndoorTemp is not '--' else IndoorTemp)+"℃ "+str(IndoorHum)+"% "+str(IndoorCO2)+"ppm"
 Bedroom_text = "B "+str('%4.1f'%BedroomTemp if BedroomTemp is not '--' else BedroomTemp)+"℃ "+str(BedroomHum)+"% "+str(BedroomCO2)+"ppm"
-#now_text = "東京 "+now_temp+"℃ "+now_humd+"% ("+(re.search(r'\d+\:\d+',now_time).group())+")"
-now_text = "東京 "+jma_temp+"℃ "+jma_humd+"% ("+str(jma_time)+"時)"
+now_text = "東京 "+str(jma_temp)+"℃ "+str(jma_wind)+"m/s ("+str(jma_time)+")"
 today_text = "今日 "+today_forecast+" "+today_max+"℃ "+today_min+"℃"
 tomorrow_text = "明日 "+tomorrow_forecast+" "+tomorrow_max+"℃ "+tomorrow_min+"℃"
 
